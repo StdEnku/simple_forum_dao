@@ -9,6 +9,7 @@ use Infra\PostsDAO;
 use Infra\UpdateUserDTO;
 use Infra\CreateUserDTO;
 use Infra\CreatePostDTO;
+use Infra\ReadPostAndUserInfoDTO;
 
 $dbcs = 'mysql:host=localhost;dbname=online_forum;charset=utf8';
 $dbUser = 'root';
@@ -26,3 +27,5 @@ $usersDao = new UsersDAO($pdo);
 //$post = new CreatePostDTO(8, "hello!!!");
 //$postsDao->Create($post);
 
+//$info = $postsDao->ReadPostAndUserInfo();
+//foreach($info as $i)echo $i->Content . "\n";
