@@ -23,5 +23,6 @@ $usersDao = new UsersDAO($pdo);
 //$user = new CreateUserDTO("arai", password_hash("hogehoge", PASSWORD_DEFAULT), false);
 //$usersDao->Create($user);
 
-$post = new CreatePostDTO(8, "hello!!!");
-$postsDao->Create($post);
+//$post = new CreatePostDTO(8, "hello!!!");
+//$postsDao->Create($post);
+
