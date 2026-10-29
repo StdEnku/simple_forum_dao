@@ -55,6 +55,7 @@ class PostsDAO {
     }
     // #endregion
 
+    // #region Read系処理
     public function ReadPostAndUserInfo(bool $isPostDateTimeDesc = true, ?int $limit = null, ?int $offset = null): Generator {
         $isLimitNull = $limit === null;
         $isOffsetNull = $offset === null;
@@ -93,6 +94,7 @@ class PostsDAO {
             );
         } 
     }
+    // #endregion
 
     // #region Update系処理
     public function Update(UpdatePostDTO $postUpdateDTO) {
