@@ -29,3 +29,15 @@ CREATE TABLE posts(
     PRIMARY KEY(id),
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+#投稿一覧データ取得
+SELECT 
+    posts.id AS id, 
+    users.id AS user_id, 
+    users.name AS user_name, 
+    posts.post_date_time AS post_date_time, 
+    posts.content AS content, 
+    posts.is_exists 
+FROM posts 
+INNER JOIN users ON posts.user_id = users.id 
+ORDER BY post_date_time DESC;

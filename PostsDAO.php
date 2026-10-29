@@ -9,7 +9,7 @@ use Generator;
 class CreatePostDTO {
     public function __construct(
         public int $UserId,
-        public string $Content // string に修正
+        public string $Content
     ){}
 }
 
@@ -17,8 +17,19 @@ class UpdatePostDTO {
     public function __construct(
         public int $Id,
         public int $UserId,
-        public string $Content // string に修正
+        public string $Content 
     ){}
+}
+
+class ReadPostAndUserInfoDTO {
+    public function __construct(
+        public int $Id,
+        public int $UserId,
+        public string $UserName,
+        public string $PostDateTime,
+        public string $Content,
+        public bool $IsExists
+    ) {}
 }
 // #endregion
 
@@ -43,6 +54,45 @@ class PostsDAO {
         $stmt->execute();
     }
     // #endregion
+
+    public function ReadPostAndUserInfo(bool $isPostDateTimeDesc = true, ?int $limit = null, ?int $offset = null): Generator {
+        $isLimitNull = $limit === null;
+        $isOffsetNull = $offset === null;
+
+        $sortStmt = $isPostDateTimeDesc ? 'DESC' : 'ASC';
+        $limitStmt = $isLimitNull ? "" : "LIMIT :limit";
+        $offsetStmt = $isOffsetNull ? "" : "OFFSET :offset";
+
+        $query = "
+            SELECT 
+                posts.id AS id, 
+                users.id AS user_id, 
+                users.name AS user_name, 
+                posts.post_date_time AS post_date_time, 
+                posts.content AS content, 
+                posts.is_exists AS is_exists
+            FROM posts 
+            INNER JOIN users ON posts.user_id = users.id 
+            ORDER BY post_date_time {$sortStmt}
+            {$limitStmt} {$offsetStmt};
+        ";
+
+        $stmt = $this->_pdo->prepare($query);
+        if (!$isLimitNull) $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        if (!$isOffsetNull) $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        foreach($stmt as $row) {
+            yield new ReadPostAndUserInfoDTO(
+                $row['id'],
+                $row['user_id'],
+                $row['user_name'],
+                $row['post_date_time'],
+                $row['content'],
+                $row['is_exists']
+            );
+        } 
+    }
 
     // #region Update系処理
     public function Update(UpdatePostDTO $postUpdateDTO) {
